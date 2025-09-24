@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Ember:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
     <style>
         body { font-family: 'Ember', Arial, sans-serif; background-color: #f3f3f3; margin: 0; padding: 20px; min-height: 100vh; }
         .header { background-color: #232f3e; color: white; padding: 10px 20px; text-align: center; }
@@ -64,7 +65,7 @@
             </div>
             <div class="form-group">
                 <label for="billingAddress">Billing Address</label>
-                <input type="text" id="billingAddress" placeholder="123 Main Street" required>
+                <input type="text" id="billingAddress" placeholder="Start typing your address..." required>
             </div>
             <div class="row">
                 <div class="form-group">
@@ -153,6 +154,29 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Initialize Google Places Autocomplete
+        const autocomplete = new google.maps.places.Autocomplete(document.getElementById('billingAddress'), {
+            types: ['address'],
+            componentRestrictions: { country: ['us', 'ca', 'uk', 'au', 'de'] } // Restrict to common countries
+        });
+
+        autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            if (place.address_components) {
+                let city = '', state = '', zip = '', country = '';
+                place.address_components.forEach(component => {
+                    if (component.types.includes('locality')) city = component.long_name;
+                    if (component.types.includes('administrative_area_level_1')) state = component.short_name;
+                    if (component.types.includes('postal_code')) zip = component.long_name;
+                    if (component.types.includes('country')) country = component.long_name;
+                });
+                document.getElementById('billingCity').value = city;
+                document.getElementById('billingState').value = state;
+                document.getElementById('billingZip').value = zip;
+                document.getElementById('billingCountry').value = country === 'United States' ? 'US' : (country === 'Canada' ? 'CA' : (country === 'United Kingdom' ? 'UK' : (country === 'Australia' ? 'AU' : (country === 'Germany' ? 'DE' : ''))));
+            }
+        });
 
         document.getElementById('cardNumber').addEventListener('input', (e) => {
             e.target.value = e.target.value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1 ').slice(0, 19);
