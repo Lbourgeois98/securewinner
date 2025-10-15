@@ -1,93 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pay with Card</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #0b0b0b;
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-  }
-  #checkout-box {
-    background: #1a1a1a;
-    padding: 30px 40px;
-    border-radius: 14px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  }
-  #logo img {
-    width: 120px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
-  input {
-    padding: 10px;
-    font-size: 1.2rem;
-    border-radius: 6px;
-    border: 1px solid #444;
-    background: #222;
-    color: #fff;
-    text-align: center;
-    width: 120px;
-    margin-bottom: 20px;
-  }
-  button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  button:hover { background: #0056b3; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helio Checkout - Pay with Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .amount-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 15px 15px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .preset-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .preset-btn {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .preset-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .checkout-container {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .pay-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .pay-button:active {
+            transform: translateY(0);
+        }
+
+        .pay-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-box p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .error-message {
+            background: #fee;
+            border-left: 4px solid #f44;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #c33;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background: #efe;
+            border-left: 4px solid #4c4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #363;
+            font-size: 14px;
+        }
+
+        #helio-checkout {
+            min-height: 50px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Complete Your Payment</h1>
+        <p class="subtitle">Choose an amount and pay securely with card or crypto</p>
 
-<div id="checkout-box">
-  <div id="logo">
-    <img src="https://techpimp.netlify.app/download.jpeg" alt="Your Logo">
-  </div>
+        <div class="amount-section">
+            <label for="amount">Payment Amount</label>
+            <div class="input-group">
+                <span class="currency-symbol">$</span>
+                <input 
+                    type="number" 
+                    id="amount" 
+                    placeholder="0.00" 
+                    min="1" 
+                    step="0.01"
+                    value="10.00"
+                >
+            </div>
 
-  <h2>Enter Amount to Pay</h2>
-  <input type="number" id="amountInput" value="5.99" min="0.01" step="0.01" />
-  <br>
-  <button id="payButton">Pay with Card</button>
-</div>
+            <div class="preset-amounts">
+                <button class="preset-btn" onclick="setAmount(10)">$10</button>
+                <button class="preset-btn" onclick="setAmount(25)">$25</button>
+                <button class="preset-btn" onclick="setAmount(50)">$50</button>
+                <button class="preset-btn" onclick="setAmount(100)">$100</button>
+                <button class="preset-btn" onclick="setAmount(250)">$250</button>
+                <button class="preset-btn" onclick="setAmount(500)">$500</button>
+            </div>
+        </div>
 
-<script>
-document.getElementById("payButton").addEventListener("click", async () => {
-  const amount = parseFloat(document.getElementById("amountInput").value);
-  if (!amount || amount <= 0) return alert("Enter a valid amount.");
+        <div class="checkout-container">
+            <button id="pay-button" class="pay-button" onclick="createCheckout()">
+                Continue to Payment
+            </button>
+            <div id="helio-checkout"></div>
+        </div>
 
-  try {
-    const res = await fetch("/api/create-checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount })
-    });
-    const data = await res.json();
-    if (data.checkoutUrl) {
-      window.location.href = data.checkoutUrl;
-    } else {
-      alert("Failed to create checkout.");
-      console.error(data);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Error creating checkout.");
-  }
-});
-</script>
+        <div class="info-box">
+            <p><strong>💳 Card payments accepted</strong><br>
+            Pay with your credit or debit card, or choose from 100+ cryptocurrencies.</p>
+        </div>
 
+        <div id="message-container"></div>
+    </div>
+
+    <!-- Helio Checkout Script -->
+    <script type="module" crossorigin src="https://embed.hel.io/assets/index-v1.js"></script>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - THIS IS DEMO MODE
+        // Replace with your actual backend endpoint
+        // ============================================
+        const CONFIG = {
+            // Your backend endpoint that creates charges
+            backendUrl: '/api/create-charge',
+            
+            // Or use demo mode with a static paylinkId
+            useDemo: true,
+            demoPaylinkId: 'YOUR_PAYLINK_ID_HERE'
+        };
+
+        // ============================================
+        // Helper Functions
+        // ============================================
+        function setAmount(value) {
+            document.getElementById('amount').value = value.toFixed(2);
+        }
+
+        function showMessage(message, type = 'error') {
+            const container = document.getElementById('message-container');
+            container.innerHTML = `
+                <div class="${type}-message">
+                    ${message}
+                </div>
+            `;
+        }
+
+        function clearMessage() {
+            document.getElementById('message-container').innerHTML = '';
+        }
+
+        async function createCheckout() {
+            const amount = document.getElementById('amount').value;
+            const button = document.getElementById('pay-button');
+            const checkoutContainer = document.getElementById('helio-checkout');
+            
+            // Validate amount
+            if (!amount || parseFloat(amount) <= 0) {
+                showMessage('Please enter a valid amount greater than $0');
+                return;
+            }
+
+            clearMessage();
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span>Creating checkout...';
+            checkoutContainer.innerHTML = '';
+
+            try {
+                if (CONFIG.useDemo) {
+                    // Demo mode: Use static paylinkId
+                    await renderDemoCheckout(amount);
+                } else {
+                    // API mode: Create charge via backend
+                    await createChargeAndRender(amount);
+                }
+                
+                button.style.display = 'none';
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(error.message || 'Failed to create checkout. Please try again.');
+                button.disabled = false;
+                button.innerHTML = 'Continue to Payment';
+            }
+        }
+
+        async function renderDemoCheckout(amount) {
+            if (CONFIG.demoPaylinkId === 'YOUR_PAYLINK_ID_HERE') {
+                throw new Error('Please configure your paylinkId in the code or set up a backend endpoint.');
+            }
+
+            return new Promise((resolve, reject) => {
+                const checkInterval = setInterval(() => {
+                    if (window.helioCheckout) {
+                        clearInterval(checkInterval);
+                        
+                        const checkoutContainer = document.getElementById('helio-checkout');
+                        const config = {
+                            paylinkId: CONFIG.demoPaylinkId,
+                            amount: amount.toString(),
+                            display: "inline",
+                            primaryPaymentMethod: "fiat",
+                            showPayWithCard: true,
+                            theme: {
+                                themeMode: "light",
+                            },
+                            primaryColor: "#667eea",
+                            neutralColor: "#5A6578",
+                            onSuccess: (event) => {
+                                console.log('Payment successful!', event);
+                                showMessage('Payment successful! Thank you for your purchase.', 'success');
+                            },
+                            onError: (event) => {
+                                console.error('Payment error:', event);
+                                showMessage('Payment failed. Please try again.');
+                            },
+                            onCancel: () => {
+                                document.getElementById('pay-button').style.display = 'block';
+                                document.getElementById('helio-checkout').innerHTML = '';
+                            },
+                        };
+
+                        window.helioCheckout(checkoutContainer, config);
+                        resolve();
+                    }
+                }, 100);
+
+                // Timeout after 5 seconds
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    if (!window.helioCheckout) {
+                        reject(new Error('Failed to load Helio checkout. Please refresh the page.'));
+                    }
+                }, 5000);
+            });
+        }
+
+        async function createChargeAndRender(amount) {
+            // Call your backend to create a charge
+            const response = await fetch(CONFIG.backendUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: parseFloat(amount),
+                    currency: 'USD'
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Failed to create charge');
+            }
+
+            const data = await response.json();
+            const chargeToken = data.chargeToken || data.token;
+
+            if (!chargeToken) {
+                throw new Error('No charge token received from server');
+            }
+
+            // Render checkout with chargeToken
+            return new Promise((resolve, reject) => {
+                const checkInterval = setInterval(() => {
+                    if (window.helioCheckout) {
+                        clearInterval(checkInterval);
+                        
+                        const checkoutContainer = document.getElementById('helio-checkout');
+                        const config = {
+                            chargeToken: chargeToken,
+                            display: "inline",
+                            primaryPaymentMethod: "fiat",
+                            showPayWithCard: true,
+                            theme: {
+                                themeMode: "light",
+                            },
+                            primaryColor: "#667eea",
+                            neutralColor: "#5A6578",
+                            onSuccess: (event) => {
+                                console.log('Payment successful!', event);
+                                showMessage('Payment successful! Thank you for your purchase.', 'success');
+                            },
+                            onError: (event) => {
+                                console.error('Payment error:', event);
+                                showMessage('Payment failed. Please try again.');
+                            },
+                            onCancel: () => {
+                                document.getElementById('pay-button').style.display = 'block';
+                                document.getElementById('helio-checkout').innerHTML = '';
+                            },
+                        };
+
+                        window.helioCheckout(checkoutContainer, config);
+                        resolve();
+                    }
+                }, 100);
+
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    if (!window.helioCheckout) {
+                        reject(new Error('Failed to load Helio checkout. Please refresh the page.'));
+                    }
+                }, 5000);
+            });
+        }
+    </script>
 </body>
 </html>
