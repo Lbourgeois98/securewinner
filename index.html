@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pay with Card</title>
 
   <!-- Helio Embed Script -->
@@ -11,8 +11,7 @@
   <style>
     body {
       margin: 0;
-      background: #000;
-      color: #abff09;
+      background: #121212;
       font-family: "Poppins", Arial, sans-serif;
       display: flex;
       flex-direction: column;
@@ -20,6 +19,7 @@
       align-items: center;
       height: 100vh;
       text-align: center;
+      color: #FFFFFF;
     }
 
     #brand {
@@ -30,38 +30,41 @@
       width: 140px;
       height: auto;
       border-radius: 12px;
-      box-shadow: 0 0 20px #8200b7;
+      box-shadow: 0 0 10px #6200EA;
     }
 
     #helioCheckoutContainer button {
-      transform: scale(1.4);
-      padding: 18px 36px !important;
-      font-size: 1.3rem !important;
+      transform: scale(1.3);
+      padding: 16px 32px !important;
+      font-size: 1.2rem !important;
       font-weight: 600;
-      border-radius: 12px !important;
-      box-shadow: 0 0 15px #abff09;
+      border-radius: 10px !important;
+      background-color: #4CAF50 !important;
+      color: #fff !important;
+      box-shadow: 0 0 10px #6200EA;
       transition: all 0.2s ease;
     }
 
     #helioCheckoutContainer button:hover {
-      transform: scale(1.5);
-      box-shadow: 0 0 25px #abff09;
+      transform: scale(1.35);
+      box-shadow: 0 0 15px #6200EA;
     }
 
     @media (max-width: 600px) {
       #helioCheckoutContainer button {
-        transform: scale(1.2);
-        font-size: 1.1rem !important;
-        padding: 14px 26px !important;
+        transform: scale(1.1);
+        font-size: 1rem !important;
+        padding: 12px 24px !important;
       }
+
       #brand img {
         width: 100px;
       }
     }
   </style>
 </head>
-
 <body>
+
   <div id="brand">
     <img src="https://techpimp.netlify.app/download.jpeg" alt="Your Logo" />
   </div>
@@ -73,26 +76,17 @@
       const checkout = window.helioCheckout(
         document.getElementById("helioCheckoutContainer"),
         {
-          paylinkId: "68ef6f7d89c8017dde33644f", // your Helio dynamic paylink
+          paylinkId: "68ef6f7d89c8017dde33644f", // your Helio paylink
           display: "button",
-          primaryPaymentMethod: "fiat", // card only
+          primaryPaymentMethod: "fiat", // card-only
           showPayWithCard: true,
           showPayWithCrypto: false,
-          amount: "5.99",                // default amount so it works
-          allowCustomAmount: true        // user can change the amount
+          amount: "5.99",               // pre-filled amount
+          allowCustomAmount: true        // user can edit the amount
         }
       );
-
-      // Set placeholder in the amount input after widget loads
-      checkout.on("ready", () => {
-        const input = document.querySelector(
-          "#helioCheckoutContainer input[type='number']"
-        );
-        if (input) {
-          input.placeholder = "5.99";
-        }
-      });
     });
   </script>
+
 </body>
 </html>
