@@ -1,8 +1,18 @@
 {
   "name": "helio-pay",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Helio payment integration",
+  "main": "api/create-checkout.js",
+  "scripts": {
+    "start": "node api/create-checkout.js",
+    "dev": "nodemon api/create-checkout.js"
+  },
   "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
     "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
