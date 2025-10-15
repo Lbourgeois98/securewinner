@@ -7,23 +7,24 @@ export default async function handler(req, res) {
   }
 
   const { amount } = req.body;
+
   if (!amount || amount <= 0) {
     return res.status(400).json({ error: "Invalid amount" });
   }
 
-  const HELIO_SECRET_KEY = process.env.HELIO_SECRET_KEY; // stored in Vercel
+  const HELIO_SECRET_KEY = process.env.HELIO_SECRET_KEY; // set in Vercel env
 
   try {
-    const response = await fetch("https://api.hel.io/v1/payments", {
+    const response = await fetch("https://api.hel.io/v1/checkout", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${HELIO_SECRET_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: amount,
+        amount,
         currency: "USD",
-        payment_methods: ["card"], // card-only
+        payment_methods: ["card"],
       }),
     });
 
@@ -32,6 +33,7 @@ export default async function handler(req, res) {
     if (data.checkout_url) {
       res.status(200).json({ checkoutUrl: data.checkout_url });
     } else {
+      console.error("Helio response:", data);
       res.status(500).json({ error: "Failed to create checkout" });
     }
   } catch (err) {
