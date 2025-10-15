@@ -13,8 +13,9 @@ app.use(express.json());
 // ============================================
 const HELIO_CONFIG = {
   // Get these from: https://app.hel.io/ -> Settings -> API
-  publicApiKey: 'HELIO_PUBLIC_KEY',
-  secretApiKey: 'HELIO_SECRET_KEY',
+  // These will automatically pull from Vercel environment variables
+  publicApiKey: process.env.HELIO_PUBLIC_KEY || 'HELIO_PUBLIC_KEY',
+  secretApiKey: process.env.HELIO_SECRET_KEY || 'HELIO_SECRET_KEY',
   
   // Your Helio wallet ID from Settings -> Manage Wallets -> Copy Helio ID
   walletId: process.env.HELIO_WALLET_ID || '68d51417b75b14c25b97d4c8',
@@ -26,8 +27,8 @@ const HELIO_CONFIG = {
   // Common ones:
   // USDC (Solana): "6340313846e4f91b8abc519b"
   // SOL: "63d7b5f3e0e0e00d8d0e0e0a"
-  pricingCurrencyId: '6340313846e4f91b8abc519b', // USDC
-  recipientCurrencyId: '6340313846e4f91b8abc519b' // USDC
+  pricingCurrencyId: process.env.HELIO_PRICING_CURRENCY_ID || '6340313846e4f91b8abc519b', // USDC
+  recipientCurrencyId: process.env.HELIO_RECIPIENT_CURRENCY_ID || '6340313846e4f91b8abc519b' // USDC
 };
 
 // ============================================
@@ -46,10 +47,10 @@ app.post('/api/create-charge', async (req, res) => {
     }
 
     // Check if API keys are configured
-    if (HELIO_CONFIG.publicApiKey === 'YOUR_PUBLIC_API_KEY') {
+    if (HELIO_CONFIG.publicApiKey === 'HELIO_PUBLIC_KEY') {
       return res.status(500).json({ 
         error: 'Configuration error',
-        message: 'Please configure your Helio API keys in the backend code or environment variables' 
+        message: 'Please configure your Helio API keys in the backend code' 
       });
     }
 
@@ -167,7 +168,7 @@ app.post('/api/webhook/helio', async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok',
-    configured: HELIO_CONFIG.publicApiKey !== 'YOUR_PUBLIC_API_KEY'
+    configured: HELIO_CONFIG.publicApiKey !== 'HELIO_PUBLIC_KEY'
   });
 });
 
@@ -180,12 +181,12 @@ app.use(express.static('.'));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Helio API configured: ${HELIO_CONFIG.publicApiKey !== 'YOUR_PUBLIC_API_KEY'}`);
+  console.log(`Helio API configured: ${HELIO_CONFIG.publicApiKey !== 'HELIO_PUBLIC_KEY'}`);
   
-  if (HELIO_CONFIG.publicApiKey === 'YOUR_PUBLIC_API_KEY') {
+  if (HELIO_CONFIG.publicApiKey === 'HELIO_PUBLIC_KEY') {
     console.log('\n⚠️  WARNING: Please configure your Helio API keys!');
     console.log('   1. Go to https://app.hel.io/ -> Settings -> API');
     console.log('   2. Enable API and copy your keys');
-    console.log('   3. Update HELIO_CONFIG in this file or set environment variables\n');
+    console.log('   3. Update HELIO_CONFIG in this file\n');
   }
 });
