@@ -23,7 +23,7 @@
     }
 
     #brand {
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
 
     #brand img {
@@ -31,6 +31,16 @@
       height: auto;
       border-radius: 12px;
       box-shadow: 0 0 10px #6200EA;
+    }
+
+    #amountInput {
+      width: 120px;
+      font-size: 1.2rem;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 2px solid #4CAF50;
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     #helioCheckoutContainer button {
@@ -56,9 +66,12 @@
         font-size: 1rem !important;
         padding: 12px 24px !important;
       }
-
       #brand img {
         width: 100px;
+      }
+      #amountInput {
+        width: 90px;
+        font-size: 1rem;
       }
     }
   </style>
@@ -69,22 +82,36 @@
     <img src="https://techpimp.netlify.app/download.jpeg" alt="Your Logo" />
   </div>
 
+  <!-- Editable amount input -->
+  <input type="number" id="amountInput" value="5.99" step="0.01" min="0.01" />
+
+  <!-- Helio checkout button -->
   <div id="helioCheckoutContainer"></div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Initialize Helio widget
       const checkout = window.helioCheckout(
         document.getElementById("helioCheckoutContainer"),
         {
-          paylinkId: "68ef6f7d89c8017dde33644f", // your Helio paylink
+          paylinkId: "68ef6f7d89c8017dde33644f", // your dynamic paylink
           display: "button",
-          primaryPaymentMethod: "fiat", // card-only
+          primaryPaymentMethod: "fiat",
           showPayWithCard: true,
           showPayWithCrypto: false,
-          amount: "5.99",               // pre-filled amount
-          allowCustomAmount: true        // user can edit the amount
+          amount: "5.99",           // default amount
+          allowCustomAmount: true,  // user can edit
+          apiKey: "qYJsXiYN4wLdm-Cn-~792qlmX_bzbNZCfkcGvX2BDFyi9R3P2CwcdjzexTJr8nD~"
         }
       );
+
+      // Update Helio checkout amount when user edits input
+      const amountInput = document.getElementById("amountInput");
+      amountInput.addEventListener("input", () => {
+        let val = parseFloat(amountInput.value);
+        if (isNaN(val) || val <= 0) val = 0.01;
+        checkout.setAmount(val.toFixed(2));
+      });
     });
   </script>
 
