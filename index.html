@@ -7,53 +7,67 @@
 <style>
   body {
     font-family: Arial, sans-serif;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    height: 100vh; background: #121212; color: #fff; margin: 0;
+    background: #0b0b0b;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
   }
-  #logo {
-    margin-bottom: 30px;
+  #checkout-box {
+    background: #1a1a1a;
+    padding: 30px 40px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
   }
   #logo img {
-    width: 140px;
-    height: auto;
+    width: 120px;
     border-radius: 12px;
-    box-shadow: 0 0 10px #6200EA;
+    margin-bottom: 20px;
   }
-  h2 { margin-bottom: 20px; }
   input {
-    padding: 10px; font-size: 1.2rem;
-    border-radius: 6px; border: 2px solid #4CAF50;
-    margin-bottom: 20px; text-align: center; width: 120px;
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #222;
+    color: #fff;
+    text-align: center;
+    width: 120px;
+    margin-bottom: 20px;
   }
   button {
-    padding: 12px 24px; font-size: 1.2rem;
-    border-radius: 8px; background: #4CAF50; color: #fff;
-    border: none; cursor: pointer;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
   }
-  button:hover { background: #45A049; }
+  button:hover { background: #0056b3; }
 </style>
 </head>
 <body>
 
-<div id="logo">
-  <img src="https://techpimp.netlify.app/download.jpeg" alt="Your Logo">
+<div id="checkout-box">
+  <div id="logo">
+    <img src="https://techpimp.netlify.app/download.jpeg" alt="Your Logo">
+  </div>
+
+  <h2>Enter Amount to Pay</h2>
+  <input type="number" id="amountInput" value="5.99" min="0.01" step="0.01" />
+  <br>
+  <button id="payButton">Pay with Card</button>
 </div>
 
-<h2>Enter Amount to Pay</h2>
-<input type="number" id="amountInput" value="5.99" min="0.01" step="0.01">
-<button id="payButton">Pay with Card</button>
-
 <script>
-const payButton = document.getElementById("payButton");
-const amountInput = document.getElementById("amountInput");
-
-payButton.addEventListener("click", async () => {
-  const amount = parseFloat(amountInput.value);
-  if (!amount || amount <= 0) {
-    alert("Please enter a valid amount.");
-    return;
-  }
+document.getElementById("payButton").addEventListener("click", async () => {
+  const amount = parseFloat(document.getElementById("amountInput").value);
+  if (!amount || amount <= 0) return alert("Enter a valid amount.");
 
   try {
     const res = await fetch("/api/create-checkout", {
@@ -61,12 +75,12 @@ payButton.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount })
     });
-
     const data = await res.json();
     if (data.checkoutUrl) {
       window.location.href = data.checkoutUrl;
     } else {
       alert("Failed to create checkout.");
+      console.error(data);
     }
   } catch (err) {
     console.error(err);
