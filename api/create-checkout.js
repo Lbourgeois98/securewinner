@@ -167,7 +167,7 @@ app.post('/api/webhook/helio', async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok',
-    configured: HELIO_CONFIG.publicApiKey !== 'YOUR_PUBLIC_API_KEY'
+    configured: HELIO_CONFIG.publicApiKey !== 'HELIO_PUBLIC_KEY'
   });
 });
 
@@ -177,7 +177,7 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Helio API configured: ${HELIO_CONFIG.publicApiKey !== 'YOUR_PUBLIC_API_KEY'}`);
+  console.log(`Helio API configured: ${HELIO_CONFIG.publicApiKey !== 'HELIO_PUBLIC_KEY'}`);
   
   if (HELIO_CONFIG.publicApiKey === 'YOUR_PUBLIC_API_KEY') {
     console.log('\n⚠️  WARNING: Please configure your Helio API keys!');
