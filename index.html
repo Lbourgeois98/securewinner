@@ -9,7 +9,6 @@
   <script type="module" crossorigin src="https://embed.hel.io/assets/index-v1.js"></script>
 
   <style>
-    /* ===== Page Setup ===== */
     body {
       margin: 0;
       background: #000;
@@ -23,7 +22,6 @@
       text-align: center;
     }
 
-    /* ===== Optional logo/title area ===== */
     #brand {
       margin-bottom: 40px;
     }
@@ -35,14 +33,6 @@
       box-shadow: 0 0 20px #8200b7;
     }
 
-    #brand h1 {
-      font-size: 2rem;
-      letter-spacing: 1px;
-      text-shadow: 0 0 15px #8200b7;
-      margin: 0;
-    }
-
-    /* ===== Helio button styling ===== */
     #helioCheckoutContainer button {
       transform: scale(1.4);
       padding: 18px 36px !important;
@@ -58,54 +48,50 @@
       box-shadow: 0 0 25px #abff09;
     }
 
-    /* ===== Mobile adjustments ===== */
     @media (max-width: 600px) {
       #helioCheckoutContainer button {
         transform: scale(1.2);
         font-size: 1.1rem !important;
         padding: 14px 26px !important;
       }
-
       #brand img {
         width: 100px;
-      }
-
-      #brand h1 {
-        font-size: 1.5rem;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- 🪩 Optional logo or brand name -->
   <div id="brand">
-    <!-- Replace this image URL with your own logo OR delete and uncomment the text below -->
     <img src="https://techpimp.netlify.app/download.jpeg" alt="Your Logo" />
-    <!-- <h1>Your Brand Name</h1> -->
   </div>
 
-  <!-- 💳 Helio checkout container -->
   <div id="helioCheckoutContainer"></div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      window.helioCheckout(
+      const checkout = window.helioCheckout(
         document.getElementById("helioCheckoutContainer"),
         {
-          paylinkId: "68ef6f7d89c8017dde33644f", // your Helio Dynamic Paylink ID
-          theme: {
-            themeMode: "dark",
-            primaryColor: "#abff09",
-            neutralColor: "#8200b7"
-          },
-          display: "button",            // show as button
-          primaryPaymentMethod: "fiat", // show card by default
-          showPayWithCard: true,        // card ON
-          showPayWithCrypto: false,     // crypto OFF
-          allowCustomAmount: true       // user can type any amount
+          paylinkId: "68ef6f7d89c8017dde33644f", // your Helio dynamic paylink
+          display: "button",
+          primaryPaymentMethod: "fiat", // card only
+          showPayWithCard: true,
+          showPayWithCrypto: false,
+          amount: "5.99",                // default amount so it works
+          allowCustomAmount: true        // user can change the amount
         }
       );
+
+      // Set placeholder in the amount input after widget loads
+      checkout.on("ready", () => {
+        const input = document.querySelector(
+          "#helioCheckoutContainer input[type='number']"
+        );
+        if (input) {
+          input.placeholder = "5.99";
+        }
+      });
     });
   </script>
 </body>
