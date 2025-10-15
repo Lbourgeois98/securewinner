@@ -9,7 +9,7 @@
   <script type="module" crossorigin src="https://embed.hel.io/assets/index-v1.js"></script>
 
   <style>
-    /* Center entire page */
+    /* ===== Page Setup ===== */
     body {
       margin: 0;
       background: #000;
@@ -23,7 +23,7 @@
       text-align: center;
     }
 
-    /* Optional logo or text title */
+    /* ===== Optional logo/title area ===== */
     #brand {
       margin-bottom: 40px;
     }
@@ -42,7 +42,7 @@
       margin: 0;
     }
 
-    /* Make button bigger */
+    /* ===== Helio button styling ===== */
     #helioCheckoutContainer button {
       transform: scale(1.4);
       padding: 18px 36px !important;
@@ -50,6 +50,7 @@
       font-weight: 600;
       border-radius: 12px !important;
       box-shadow: 0 0 15px #abff09;
+      transition: all 0.2s ease;
     }
 
     #helioCheckoutContainer button:hover {
@@ -57,16 +58,18 @@
       box-shadow: 0 0 25px #abff09;
     }
 
-    /* Mobile-friendly scaling */
+    /* ===== Mobile adjustments ===== */
     @media (max-width: 600px) {
       #helioCheckoutContainer button {
         transform: scale(1.2);
         font-size: 1.1rem !important;
         padding: 14px 26px !important;
       }
+
       #brand img {
         width: 100px;
       }
+
       #brand h1 {
         font-size: 1.5rem;
       }
@@ -75,17 +78,14 @@
 </head>
 
 <body>
-  <!-- 🪩 Add your logo OR name here -->
+  <!-- 🪩 Optional logo or brand name -->
   <div id="brand">
-    <!-- Option 1: logo image -->
-    <!-- Replace the image URL below with your own -->
+    <!-- Replace this image URL with your own logo OR delete and uncomment the text below -->
     <img src="https://techpimp.netlify.app/download.jpeg" alt="Your Logo" />
-
-    <!-- Option 2: or remove the image above and just show text -->
     <!-- <h1>Your Brand Name</h1> -->
   </div>
 
-  <!-- Helio checkout container -->
+  <!-- 💳 Helio checkout container -->
   <div id="helioCheckoutContainer"></div>
 
   <script>
@@ -93,17 +93,17 @@
       window.helioCheckout(
         document.getElementById("helioCheckoutContainer"),
         {
-          paylinkId: "68ef6c937967b9161b5ecb9e", // your Helio Paylink ID
+          paylinkId: "68ef6f7d89c8017dde33644f", // your Helio Dynamic Paylink ID
           theme: {
             themeMode: "dark",
             primaryColor: "#abff09",
             neutralColor: "#8200b7"
           },
-          display: "button",
-          primaryPaymentMethod: "fiat", // card only
-          showPayWithCard: true,
-          showPayWithCrypto: false,
-          allowCustomAmount: true // let user choose amount
+          display: "button",            // show as button
+          primaryPaymentMethod: "fiat", // show card by default
+          showPayWithCard: true,        // card ON
+          showPayWithCrypto: false,     // crypto OFF
+          allowCustomAmount: true       // user can type any amount
         }
       );
     });
